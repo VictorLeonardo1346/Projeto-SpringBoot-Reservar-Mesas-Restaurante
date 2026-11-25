@@ -1,7 +1,9 @@
 package com.restaurante.reservar_mesas.controller;
 
+import com.restaurante.reservar_mesas.dtos.AgendamentoRequestDTO;
 import com.restaurante.reservar_mesas.infrastructure.entity.AgendamentoEntity;
 import com.restaurante.reservar_mesas.services.AgendamentoService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +19,24 @@ public class AgendamentoController {
 
     private final AgendamentoService agendamentoService;
 
+
     @PostMapping
     public ResponseEntity<AgendamentoEntity.Agendamento> salvarAgendamento(
-            @RequestBody AgendamentoEntity.Agendamento agendamento) {
+            @Valid @RequestBody AgendamentoRequestDTO dto) {
+
+        AgendamentoEntity.Agendamento agendamento =
+                new AgendamentoEntity().new Agendamento();
+
+        agendamento.setMesa(dto.getMesa());
+        agendamento.setLugares(dto.getLugares());
+        agendamento.setDataHoraAgendamento(dto.getDataHoraAgendamento());
+        agendamento.setCliente(dto.getCliente());
+        agendamento.setTelefoneCliente(dto.getTelefoneCliente());
 
         return ResponseEntity.accepted()
                 .body(agendamentoService.salvarAgendamento(agendamento));
     }
+
 
     @DeleteMapping
     public ResponseEntity<Void> deletarAgendamento(
